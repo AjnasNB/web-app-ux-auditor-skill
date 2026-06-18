@@ -1,0 +1,56 @@
+{
+  "name": "web-app-ux-auditor-skill",
+  "version": "0.1.0",
+  "description": "Agent Skill for auditing and improving web app UI/UX flows across modern frontend stacks.",
+  "license": "MIT",
+  "author": {
+    "name": "ajnasnb",
+    "email": "ajnasnb@gmail.com"
+  },
+  "type": "commonjs",
+  "bin": {
+    "web-app-ux-auditor": "bin/install.js",
+    "web-app-ux-auditor-skill": "bin/install.js"
+  },
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "references/",
+    "scripts/",
+    "skills/",
+    "bin/",
+    ".codex-plugin/",
+    ".claude-plugin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "agent-skill",
+    "claude-code",
+    "codex",
+    "ux",
+    "ui",
+    "web",
+    "react",
+    "nextjs",
+    "vue",
+    "svelte",
+    "angular",
+    "accessibility",
+    "core-web-vitals"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ajnasnb/web-app-ux-auditor-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ajnasnb/web-app-ux-auditor-skill/issues"
+  },
+  "homepage": "https://github.com/ajnasnb/web-app-ux-auditor-skill#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

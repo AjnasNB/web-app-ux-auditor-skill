@@ -1,0 +1,45 @@
+{
+  "name": "web-app-ux-auditor",
+  "version": "0.1.0",
+  "description": "Agent Skill for auditing and improving web app UI/UX flows across modern frontend stacks.",
+  "author": {
+    "name": "ajnasnb",
+    "email": "ajnasnb@gmail.com",
+    "url": "https://github.com/ajnasnb"
+  },
+  "homepage": "https://github.com/ajnasnb/web-app-ux-auditor-skill",
+  "repository": "https://github.com/ajnasnb/web-app-ux-auditor-skill",
+  "license": "MIT",
+  "keywords": [
+    "ux",
+    "ui",
+    "web",
+    "accessibility",
+    "react",
+    "nextjs",
+    "vue",
+    "svelte",
+    "angular",
+    "core-web-vitals"
+  ],
+  "skills": "./skills",
+  "interface": {
+    "displayName": "Web App UX Auditor",
+    "shortDescription": "Audit web app UI/UX flows",
+    "longDescription": "Review and improve web app navigation, onboarding, accessibility, keyboard focus, forms, responsive behavior, Core Web Vitals, retention, conversion, and state handling across modern frontend stacks.",
+    "developerName": "ajnasnb",
+    "category": "Development",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Review"
+    ],
+    "websiteURL": "https://github.com/ajnasnb/web-app-ux-auditor-skill",
+    "defaultPrompt": [
+      "Audit this web app UX flow.",
+      "Improve this onboarding flow.",
+      "Review accessibility and Core Web Vitals."
+    ],
+    "brandColor": "#0F766E"
+  }
+}

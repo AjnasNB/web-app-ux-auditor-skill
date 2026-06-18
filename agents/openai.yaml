@@ -1,0 +1,4 @@
+interface:
+  display_name: "Web App UX Auditor"
+  short_description: "Audit and improve web app UI/UX flows"
+  default_prompt: "Use $web-app-ux-auditor to review this web app flow and propose practical UI/UX improvements."
