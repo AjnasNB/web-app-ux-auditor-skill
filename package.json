@@ -4,7 +4,7 @@
   "description": "Agent Skill for auditing and improving web app UI/UX flows across modern frontend stacks.",
   "license": "MIT",
   "author": {
-    "name": "ajnasnb",
+    "name": "Ajnas",
     "email": "ajnasnb@gmail.com"
   },
   "type": "commonjs",
@@ -41,12 +41,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ajnasnb/web-app-ux-auditor-skill.git"
+    "url": "git+https://github.com/AjnasNB/web-app-ux-auditor-skill.git"
   },
   "bugs": {
-    "url": "https://github.com/ajnasnb/web-app-ux-auditor-skill/issues"
+    "url": "https://github.com/AjnasNB/web-app-ux-auditor-skill/issues"
   },
-  "homepage": "https://github.com/ajnasnb/web-app-ux-auditor-skill#readme",
+  "homepage": "https://github.com/AjnasNB/web-app-ux-auditor-skill#readme",
   "publishConfig": {
     "access": "public"
   },

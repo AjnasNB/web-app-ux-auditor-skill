@@ -1,6 +1,6 @@
 # Web App UX Auditor Skill
 
-A portable Agent Skill for auditing and improving web app UI/UX flows across React, Next.js, Vue, Nuxt, Svelte, SvelteKit, Angular, Solid, Remix, Astro, and plain HTML/CSS/JavaScript.
+A portable Agent Skill by Ajnas for auditing and improving web app UI/UX flows across React, Next.js, Vue, Nuxt, Svelte, SvelteKit, Angular, Solid, Remix, Astro, and plain HTML/CSS/JavaScript.
 
 Use it when you want an AI coding agent to inspect a web app, map real user flows, find UX friction, and propose or implement improvements with evidence instead of generic "make it cleaner" advice.
 
@@ -17,13 +17,18 @@ Use it when you want an AI coding agent to inspect a web app, map real user flow
 
 ## Install globally
 
-After the npm package is published:
-
 ```bash
 npx web-app-ux-auditor-skill
 ```
 
-This installs the skill for the current user into:
+The installer asks where to install:
+
+1. Global current user: Claude Code, Codex, and shared Agent Skills.
+2. Current project: local skills plus adapter files for popular coding agents.
+3. Both global and current project.
+4. Custom project path.
+
+Global install copies the skill for the current user into:
 
 - `~/.claude/skills/web-app-ux-auditor`
 - `~/.agents/skills/web-app-ux-auditor`
@@ -80,6 +85,12 @@ Copy only the skill folders and skip adapter files:
 npx web-app-ux-auditor-skill --project . --no-adapters
 ```
 
+Skip prompts and force global install:
+
+```bash
+npx web-app-ux-auditor-skill --yes
+```
+
 ## Static scanner
 
 The skill includes a Python scanner for static web UX signals:
@@ -123,6 +134,21 @@ git remote add origin https://github.com/AjnasNB/web-app-ux-auditor-skill.git
 git push -u origin main
 ```
 
+## Download from npm
+
+Install and run without keeping the package:
+
+```bash
+npx web-app-ux-auditor-skill
+```
+
+Install the CLI globally:
+
+```bash
+npm install -g web-app-ux-auditor-skill
+web-app-ux-auditor
+```
+
 ## Publish to npm
 
 Log in once:
@@ -143,7 +169,7 @@ Publish:
 npm publish --access public
 ```
 
-After publishing, users install it with:
+After publishing, users download and install it with:
 
 ```bash
 npx web-app-ux-auditor-skill

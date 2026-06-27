@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "description": "Agent Skill for auditing and improving web app UI/UX flows across modern frontend stacks.",
   "author": {
-    "name": "ajnasnb",
+    "name": "Ajnas",
     "email": "ajnasnb@gmail.com",
-    "url": "https://github.com/ajnasnb"
+    "url": "https://github.com/AjnasNB"
   },
-  "homepage": "https://github.com/ajnasnb/web-app-ux-auditor-skill",
-  "repository": "https://github.com/ajnasnb/web-app-ux-auditor-skill",
+  "homepage": "https://github.com/AjnasNB/web-app-ux-auditor-skill",
+  "repository": "https://github.com/AjnasNB/web-app-ux-auditor-skill",
   "license": "MIT",
   "keywords": [
     "ux",
@@ -27,14 +27,14 @@
     "displayName": "Web App UX Auditor",
     "shortDescription": "Audit web app UI/UX flows",
     "longDescription": "Review and improve web app navigation, onboarding, accessibility, keyboard focus, forms, responsive behavior, Core Web Vitals, retention, conversion, and state handling across modern frontend stacks.",
-    "developerName": "ajnasnb",
+    "developerName": "Ajnas",
     "category": "Development",
     "capabilities": [
       "Read",
       "Write",
       "Review"
     ],
-    "websiteURL": "https://github.com/ajnasnb/web-app-ux-auditor-skill",
+    "websiteURL": "https://github.com/AjnasNB/web-app-ux-auditor-skill",
     "defaultPrompt": [
       "Audit this web app UX flow.",
       "Improve this onboarding flow.",

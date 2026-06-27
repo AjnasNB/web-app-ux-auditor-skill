@@ -4,6 +4,7 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
+const readline = require("readline");
 
 const SKILL_NAME = "web-app-ux-auditor";
 const DISPLAY_NAME = "Web App UX Auditor";
@@ -24,12 +25,13 @@ Usage:
   web-app-ux-auditor --targets claude,codex,agents
 
 Default:
-  Installs globally for the current user into Claude Code, Codex, and shared Agent Skills folders.
+  In an interactive terminal, asks where to install. In non-interactive shells, installs globally.
 
 Options:
   --global             Install to current-user global skill folders. Default when no mode is passed.
   --project <path>     Install project-local skills and adapter rule files for popular coding agents.
   --targets <list>     Comma-separated global targets: claude,codex,agents,codex-legacy.
+  --yes                Skip prompts and install globally.
   --no-adapters        With --project, skip non-skill adapter files.
   --print-paths        Print install locations and exit.
   --help               Show this help.
@@ -146,25 +148,80 @@ function parseArgs(argv) {
     targets: null,
     adapters: true,
     printPaths: false,
-    help: false
+    help: false,
+    yes: false,
+    explicitMode: false
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === "--help" || arg === "-h") result.help = true;
-    else if (arg === "--global") result.global = true;
-    else if (arg === "--project") result.project = argv[++i] || ".";
-    else if (arg.startsWith("--project=")) result.project = arg.split("=")[1] || ".";
+    else if (arg === "--global") {
+      result.global = true;
+      result.explicitMode = true;
+    }
+    else if (arg === "--project") {
+      result.project = argv[++i] || ".";
+      result.explicitMode = true;
+    }
+    else if (arg.startsWith("--project=")) {
+      result.project = arg.split("=")[1] || ".";
+      result.explicitMode = true;
+    }
     else if (arg === "--targets") result.targets = (argv[++i] || "").split(",").map((s) => s.trim()).filter(Boolean);
     else if (arg.startsWith("--targets=")) result.targets = arg.split("=")[1].split(",").map((s) => s.trim()).filter(Boolean);
     else if (arg === "--no-adapters") result.adapters = false;
     else if (arg === "--print-paths") result.printPaths = true;
+    else if (arg === "--yes" || arg === "-y") result.yes = true;
   }
-  if (!result.global && !result.project) result.global = true;
+  if (result.yes && !result.explicitMode) result.global = true;
+  if (!result.global && !result.project && !process.stdin.isTTY) result.global = true;
   return result;
 }
 
-function main() {
+function ask(question) {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  return new Promise((resolve) => {
+    rl.question(question, (answer) => {
+      rl.close();
+      resolve(answer.trim());
+    });
+  });
+}
+
+async function chooseInstallMode(args) {
+  if (args.global || args.project || args.printPaths || args.help) return args;
+  if (!process.stdin.isTTY || !process.stdout.isTTY) {
+    args.global = true;
+    return args;
+  }
+
+  console.log(`${DISPLAY_NAME}`);
+  console.log("");
+  console.log("Where should this skill be installed?");
+  console.log("1. Global current user: Claude Code, Codex, and shared Agent Skills");
+  console.log("2. Current project: .claude/.agents skills plus adapters for Cursor, Windsurf, Copilot, Gemini, Continue, Cline, Roo, Kiro, Trae, OpenCode");
+  console.log("3. Both global current user and current project");
+  console.log("4. Custom project path");
+  console.log("");
+
+  const choice = await ask("Choose 1, 2, 3, or 4 [1]: ");
+  const selected = choice || "1";
+  if (selected === "2") args.project = process.cwd();
+  else if (selected === "3") {
+    args.global = true;
+    args.project = process.cwd();
+  } else if (selected === "4") {
+    const customPath = await ask("Project path: ");
+    args.project = customPath || process.cwd();
+  } else {
+    args.global = true;
+  }
+  return args;
+}
+
+async function main() {
   const args = parseArgs(process.argv.slice(2));
+  await chooseInstallMode(args);
   if (args.help) {
     usage();
     return;
@@ -192,4 +249,7 @@ function main() {
   console.log("Codex: invoke with $web-app-ux-auditor or let Codex choose it automatically.");
 }
 
-main();
+main().catch((error) => {
+  console.error(error && error.stack ? error.stack : String(error));
+  process.exitCode = 1;
+});
