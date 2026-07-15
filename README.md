@@ -1,6 +1,6 @@
 # Web App UX Auditor Skill
 
-A portable Agent Skill by Ajnas for auditing and improving web app UI/UX flows across React, Next.js, Vue, Nuxt, Svelte, SvelteKit, Angular, Solid, Remix, Astro, and plain HTML/CSS/JavaScript.
+A portable Agent Skill by Ajnas NB for auditing and improving web app UI/UX flows across React, Next.js, Vue, Nuxt, Svelte, SvelteKit, Angular, Solid, Remix, Astro, and plain HTML/CSS/JavaScript.
 
 Use it when you want an AI coding agent to inspect a web app, map real user flows, find UX friction, and propose or implement improvements with evidence instead of generic "make it cleaner" advice.
 
@@ -18,10 +18,14 @@ Use it when you want an AI coding agent to inspect a web app, map real user flow
 ## Install globally
 
 ```bash
-npx web-app-ux-auditor-skill
+npx web-app-ux-auditor-skill --global
 ```
 
-The installer asks where to install:
+An interactive terminal may omit the mode and choose from a prompt. Scripts, CI, and other
+noninteractive shells must pass `--global` and/or `--project`; a no-argument noninteractive run
+fails without writing files.
+
+The interactive installer asks where to install:
 
 1. Global current user: Claude Code, Codex, and shared Agent Skills.
 2. Current project: local skills plus adapter files for popular coding agents.
@@ -85,11 +89,24 @@ Copy only the skill folders and skip adapter files:
 npx web-app-ux-auditor-skill --project . --no-adapters
 ```
 
-Skip prompts and force global install:
+Skip prompts with an explicit global destination:
 
 ```bash
-npx web-app-ux-auditor-skill --yes
+npx web-app-ux-auditor-skill --global --yes
 ```
+
+Select global destinations explicitly:
+
+```bash
+npx web-app-ux-auditor-skill --global --targets claude,agents,codex-legacy
+```
+
+Project installs require an existing real directory. The installer rejects unknown options,
+missing values, ambiguous managed markers, and destination paths that traverse symbolic links,
+junctions, or reparse points. Adapter updates preserve user content and insert or replace only
+the block delimited by `<!-- web-app-ux-auditor:start -->` and
+`<!-- web-app-ux-auditor:end -->`. In particular, `.opencode/AGENTS.md` is never replaced as a
+whole file.
 
 ## Static scanner
 
@@ -100,6 +117,8 @@ python scripts/web_ux_static_scan.py /path/to/web-app
 ```
 
 The scanner detects review signals such as non-semantic click targets, missing image alt text, placeholder-label risks, missing button types, focus-outline removal, dialog risks, and mobile viewport issues.
+
+Linked files and directories are skipped; resolved scan inputs must remain inside the selected root.
 
 It is a triage tool, not a replacement for expert review. Confirm every finding in code, browser, screenshots, accessibility tooling, performance traces, or tests before changing behavior.
 
@@ -139,14 +158,14 @@ git push -u origin main
 Install and run without keeping the package:
 
 ```bash
-npx web-app-ux-auditor-skill
+npx web-app-ux-auditor-skill --global
 ```
 
 Install the CLI globally:
 
 ```bash
 npm install -g web-app-ux-auditor-skill
-web-app-ux-auditor
+web-app-ux-auditor --global
 ```
 
 ## Publish to npm
@@ -160,7 +179,8 @@ npm adduser
 Check the package:
 
 ```bash
-npm publish --dry-run --access public
+npm ci
+npm run release:check
 ```
 
 Publish:
@@ -172,7 +192,7 @@ npm publish --access public
 After publishing, users download and install it with:
 
 ```bash
-npx web-app-ux-auditor-skill
+npx web-app-ux-auditor-skill --global
 ```
 
 Or install the CLI globally:
@@ -181,6 +201,9 @@ Or install the CLI globally:
 npm install -g web-app-ux-auditor-skill
 web-app-ux-auditor --global
 ```
+
+See `SECURITY.md` for vulnerability reporting. The repository-only `RELEASING.md` contains the
+maintainer checklist and is intentionally excluded from the npm tarball.
 
 ## License
 

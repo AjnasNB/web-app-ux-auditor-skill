@@ -146,25 +146,40 @@ PATTERNS = [
 ]
 
 
+def contained_path(root: Path, candidate: Path) -> Path | None:
+    """Resolve a non-linked path only when it remains under the scan root."""
+    try:
+        if candidate.is_symlink():
+            return None
+        resolved = candidate.resolve(strict=True)
+        resolved.relative_to(root)
+        return resolved
+    except (OSError, RuntimeError, ValueError):
+        return None
+
+
 def iter_files(root: Path) -> Iterable[Path]:
     for path in root.rglob("*"):
-        if path.is_dir():
+        resolved = contained_path(root, path)
+        if resolved is None or not resolved.is_file():
             continue
-        if any(part in EXCLUDE_DIRS for part in path.parts):
+        relative = resolved.relative_to(root)
+        if any(part in EXCLUDE_DIRS for part in relative.parts):
             continue
-        if path.suffix.lower() not in EXTENSIONS:
+        if resolved.suffix.lower() not in EXTENSIONS:
             continue
-        if path.stat().st_size > 1_000_000:
+        if resolved.stat().st_size > 1_000_000:
             continue
-        yield path
+        yield resolved
 
 
 def detect_stack(root: Path) -> list[str]:
     stack: list[str] = []
     package_json = root / "package.json"
-    if package_json.exists():
+    safe_package_json = contained_path(root, package_json)
+    if safe_package_json is not None and safe_package_json.is_file():
         try:
-            data = json.loads(package_json.read_text(encoding="utf-8"))
+            data = json.loads(safe_package_json.read_text(encoding="utf-8"))
             deps = " ".join(
                 list((data.get("dependencies") or {}).keys())
                 + list((data.get("devDependencies") or {}).keys())
@@ -194,7 +209,7 @@ def detect_stack(root: Path) -> list[str]:
         ("pages", "Pages directory"),
         ("src", "src directory"),
     ]:
-        if (root / marker).exists():
+        if (safe_marker := contained_path(root, root / marker)) is not None and safe_marker.is_dir():
             stack.append(label)
     return sorted(set(stack)) or ["Unknown web stack"]
 
@@ -264,6 +279,8 @@ def main() -> int:
     root = Path(args.root).resolve()
     if not root.exists():
         raise SystemExit(f"Path does not exist: {root}")
+    if not root.is_dir():
+        raise SystemExit(f"Path is not a directory: {root}")
     stack, findings, file_count = scan(root)
     print(render_markdown(root, stack, findings, file_count))
     return 0
