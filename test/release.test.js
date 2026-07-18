@@ -259,7 +259,13 @@ test("static scanner runs against a fixture", (t) => {
   const fixture = temporaryDirectory(t, "web-auditor-scanner");
   const outside = temporaryDirectory(t, "web-auditor-scanner-outside");
   fs.writeFileSync(path.join(fixture, "package.json"), JSON.stringify({ dependencies: { react: "19.0.0" } }));
-  fs.writeFileSync(path.join(fixture, "index.jsx"), "<button onClick={() => save()}>Save</button>\n");
+  fs.writeFileSync(path.join(fixture, "index.jsx"), [
+    "<button onClick={() => save()}>Save</button>",
+    "<video autoplay><track kind=\"captions\" default /></video>",
+    "<img src=\"hero.png\" alt=\"Product boundary\" />",
+    "<a href=\"https://example.com\" target=\"_blank\">Docs</a>",
+    "<h1 style=\"font-size:96px\">Large title</h1>"
+  ].join("\n"));
   fs.writeFileSync(path.join(outside, "secret.jsx"), "<div onClick={leak}>LEAK_SENTINEL</div>\n");
   let linked = false;
   try {
@@ -275,7 +281,20 @@ test("static scanner runs against a fixture", (t) => {
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /# Web UX Static Scan/);
   assert.match(result.stdout, /Detected stack: React/);
+  assert.match(result.stdout, /Caption track enabled by default/);
+  assert.match(result.stdout, /Image lacks intrinsic dimensions/);
+  assert.match(result.stdout, /New-tab link may omit opener protection/);
+  assert.match(result.stdout, /Very large fixed display text/);
   if (linked) assert.doesNotMatch(result.stdout, /LEAK_SENTINEL/);
+
+  const jsonResult = spawnSync(python, [path.join(packageRoot, "scripts", "web_ux_static_scan.py"), fixture, "--format", "json"], {
+    encoding: "utf8"
+  });
+  assert.equal(jsonResult.status, 0, jsonResult.stderr);
+  const report = JSON.parse(jsonResult.stdout);
+  assert.equal(report.filesScanned, 1);
+  assert.equal(report.detectedStack.includes("React"), true);
+  assert.equal(report.findings.some((finding) => finding.title === "Video autoplay needs explicit review"), true);
 });
 
 test("dry package contains only the intended lean payload", () => {

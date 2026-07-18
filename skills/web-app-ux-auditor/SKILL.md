@@ -18,7 +18,7 @@ Audit web apps by tracing real user flows, finding friction with code and runtim
    ```
    In Claude Code, use `python ${CLAUDE_SKILL_DIR}/scripts/web_ux_static_scan.py <project-root>` when the skill is installed. Treat the script as evidence-gathering, not a replacement for expert review.
 3. Inspect routing, layouts, components, forms, design tokens, analytics events, accessibility tooling, tests, screenshots, and runtime behavior before recommending changes.
-4. Build a compact route and flow map: first visit, onboarding, sign-in/sign-up, home/dashboard, primary task, search/discovery, form submission, settings, empty/error/loading/offline states, checkout/paywall if present, and return/deep-link flows.
+4. Build a compact route and flow map: first visit, onboarding, sign-in/sign-up, home/dashboard, primary task, search/discovery, form submission, settings, documentation subroutes, empty/error/loading/offline states, checkout/paywall if present, and return/deep-link flows. Turn that map into the browser-test route matrix; do not verify only the homepage.
 5. Audit against clarity, information architecture, accessibility, keyboard/focus behavior, forms, responsive layout, performance, trust, feedback, and ethical retention. Load `references/web-ux-audit-reference.md` for the detailed checklist and framework-specific code signals.
 6. Rank findings by user impact:
    - P0: Blocks a critical task, causes data loss, breaks auth/payment, or creates severe accessibility failure.
@@ -26,7 +26,7 @@ Audit web apps by tracing real user flows, finding friction with code and runtim
    - P2: Adds avoidable friction, inconsistency, poor responsive behavior, or weak performance.
    - P3: Polish, content clarity, delight, or instrumentation improvement.
 7. When editing code, preserve the app's architecture and design system. Prefer semantic HTML, native controls, accessible framework primitives, and existing component patterns over custom widgets.
-8. Verify with the best available evidence: local browser walkthrough, Playwright, screenshots, keyboard-only test, screen reader spot-check, Lighthouse/PageSpeed/Core Web Vitals, axe/accessibility checks, unit/component tests, or static inspection. State anything that could not be verified.
+8. Verify with the best available evidence: local browser walkthrough, Playwright, screenshots, keyboard-only test, screen reader spot-check, Lighthouse/PageSpeed/Core Web Vitals, axe/accessibility checks, unit/component tests, or static inspection. Include 320px and 390px mobile widths, a desktop width, long content, and every public route when practical. For video, verify poster, dimensions, range delivery, captions, narration, and that burned-in plus sidecar captions cannot render twice. State anything that could not be verified.
 
 ## Quality Bar
 
@@ -37,6 +37,7 @@ Hold the output to a senior product design engineer standard:
 - The UI has one coherent design system: typography scale, spacing rhythm, radius rules, color roles, interaction states, motion, density, and responsive behavior.
 - Accessibility is built into semantics, keyboard behavior, focus management, contrast, target size, status announcements, and reduced-motion behavior.
 - Performance is part of UX: LCP, INP, CLS, route transitions, hydration, bundle size, and perceived latency all matter.
+- Product media is part of UX: no autoplay surprise, no duplicate captions, stable poster/aspect ratio, usable controls, and a transcript or selectable captions when speech carries meaning.
 - Retention comes from saved progress, useful reminders, reduced effort, trust, and repeated value. Do not optimize for addiction.
 
 ## Output Format

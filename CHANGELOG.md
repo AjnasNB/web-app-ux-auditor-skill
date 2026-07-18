@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add media signals for autoplay, default caption tracks, missing image dimensions, hidden overflow, oversized fixed display text, and unsafe new-tab links.
+- Add machine-readable JSON scanner output.
+- Require public-route, 320/390px, documentation, benchmark-evidence, and duplicate-caption verification in the audit workflow.
+
 ## 0.2.0 - 2026-07-15
 
 - Require explicit install modes in noninteractive environments.
