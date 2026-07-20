@@ -143,6 +143,48 @@ PATTERNS = [
         re.compile(r">\s*(Click here|Learn more|Submit|OK)\s*<", re.I),
         "Use verb-object labels such as \"Save changes\" or \"View pricing plans\".",
     ),
+    (
+        "P1",
+        "Media",
+        "Video autoplay needs explicit review",
+        re.compile(r"<video\b[^>\n]*\bautoplay\b", re.I),
+        "Avoid autoplay for product demos; if essential, keep it muted, stoppable, non-disruptive, and reduced-motion aware.",
+    ),
+    (
+        "P2",
+        "Media",
+        "Caption track enabled by default",
+        re.compile(r"<track\b(?=[^>\n]*\bkind\s*=\s*[\"']captions[\"'])(?=[^>\n]*\bdefault\b)", re.I),
+        "Confirm the video has no burned-in captions before enabling a sidecar by default; otherwise users can see duplicate captions.",
+    ),
+    (
+        "P2",
+        "Media",
+        "Image lacks intrinsic dimensions",
+        re.compile(r"<img\b(?![^>\n]*\bwidth\s*=)(?![^>\n]*\bheight\s*=)", re.I),
+        "Set intrinsic width and height or reserve the final aspect ratio to reduce layout shift.",
+    ),
+    (
+        "P2",
+        "Responsive",
+        "Horizontal overflow may be hidden instead of fixed",
+        re.compile(r"\boverflow-x-hidden\b|overflow-x\s*:\s*hidden\b", re.I),
+        "Verify content does not overflow at 320px, 400% zoom, long text, or translated copy before hiding horizontal overflow.",
+    ),
+    (
+        "P3",
+        "Typography",
+        "Very large fixed display text",
+        re.compile(r"font-size\s*:\s*(?:[8-9]\d|[1-9]\d{2,})px\b|\btext-(?:8xl|9xl)\b", re.I),
+        "Check heading line count, neighboring content, zoom, and 320px layouts; prefer a constrained responsive scale when the title dominates the task.",
+    ),
+    (
+        "P2",
+        "Links",
+        "New-tab link may omit opener protection",
+        re.compile(r"<a\b(?=[^>\n]*\btarget\s*=\s*[\"']_blank[\"'])(?![^>\n]*\brel\s*=)", re.I),
+        "Add rel=\"noopener noreferrer\" unless the framework guarantees equivalent isolation.",
+    ),
 ]
 
 
@@ -271,9 +313,24 @@ def render_markdown(root: Path, stack: list[str], findings: list[Finding], file_
     return "\n".join(out)
 
 
+def render_json(root: Path, stack: list[str], findings: list[Finding], file_count: int) -> str:
+    counts = {key: sum(1 for item in findings if item.severity == key) for key in ("P0", "P1", "P2", "P3")}
+    return json.dumps(
+        {
+            "root": str(root),
+            "filesScanned": file_count,
+            "detectedStack": stack,
+            "counts": counts,
+            "findings": [item.__dict__ for item in findings],
+        },
+        indent=2,
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Scan a web app for static UX review signals.")
     parser.add_argument("root", nargs="?", default=".", help="Project root or subdirectory to scan")
+    parser.add_argument("--format", choices=("markdown", "json"), default="markdown", help="Output format")
     args = parser.parse_args()
 
     root = Path(args.root).resolve()
@@ -282,7 +339,10 @@ def main() -> int:
     if not root.is_dir():
         raise SystemExit(f"Path is not a directory: {root}")
     stack, findings, file_count = scan(root)
-    print(render_markdown(root, stack, findings, file_count))
+    if args.format == "json":
+        print(render_json(root, stack, findings, file_count))
+    else:
+        print(render_markdown(root, stack, findings, file_count))
     return 0
 
 

@@ -93,6 +93,7 @@ Run the bundled scanner when available:
 
 ```bash
 python scripts/web_ux_static_scan.py .
+python scripts/web_ux_static_scan.py . --format json
 ```
 
 Then produce:
@@ -163,6 +164,16 @@ Then produce:
 - Avoid hover-only affordances. Anything revealed on hover must also work by keyboard and touch.
 - Keep sticky headers, sidebars, toasts, and banners from covering focused controls, errors, or primary actions.
 - Support long words, translated strings, RTL when localized, and user zoom up to common accessibility levels.
+
+### Documentation, Media, and Route Coverage
+
+- Derive the runtime route matrix from the sitemap, router, build output, and public navigation. Include nested documentation, release, community, legal, error, and deep-link routes instead of testing only the homepage.
+- Test at 320px, 390px, a tablet width, and a desktop width. Check horizontal overflow, sticky navigation, heading line count, code blocks, tables, media, and the current navigation item on every route.
+- Keep hero headings subordinate to the product job. Inspect fixed display type above roughly 80px, five-line hero wraps, large minimum heights, and repeated 120px-plus section gaps as review signals rather than automatic defects.
+- For every video, verify intrinsic dimensions, reserved aspect ratio, poster, controls, no unexpected autoplay, byte-range delivery, narration/audio, and an understandable silent path.
+- If the MP4 already burns captions, do not also auto-enable a matching sidecar track. Keep accessibility captions selectable, and avoid sidecar filenames that local players automatically load beside a downloaded burned-caption MP4.
+- Verify caption text does not cover terminal output, buttons, charts, or mobile-player controls. Check one-cue-at-a-time timing and representative frames near every scene transition.
+- Treat benchmark and release evidence as content UX: identify the exact source commit, dirty state, fixture scope, sample distribution, limitations, and reproduction path. Do not present a development snapshot as release evidence.
 
 ### Feedback, Loading, Empty, Error, and Offline States
 

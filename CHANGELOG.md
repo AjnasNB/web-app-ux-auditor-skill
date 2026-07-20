@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Add media signals for autoplay, default caption tracks, missing image dimensions, hidden overflow, oversized fixed display text, and unsafe new-tab links.
+- Add machine-readable JSON scanner output.
+- Require public-route, 320/390px, documentation, benchmark-evidence, and duplicate-caption verification in the audit workflow.
+
 ## 0.2.0 - 2026-07-15
 
 - Require explicit install modes in noninteractive environments.
@@ -8,7 +14,7 @@
 - Reject destination symlinks, junctions, reparse-point escapes, and malformed markers.
 - Keep the static scanner inside its selected root by skipping linked paths.
 - Add built-in tests, package-content checks, CI, security guidance, and release gates.
-- Require Node.js 20.18.1 or newer.
+- Support the maintained Node.js 22, 24, and 26 release lines.
 
 ## 0.1.0 - 2026-06-27
 
