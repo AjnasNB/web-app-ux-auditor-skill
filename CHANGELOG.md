@@ -14,7 +14,7 @@
 - Reject destination symlinks, junctions, reparse-point escapes, and malformed markers.
 - Keep the static scanner inside its selected root by skipping linked paths.
 - Add built-in tests, package-content checks, CI, security guidance, and release gates.
-- Require Node.js 20.18.1 or newer.
+- Support the maintained Node.js 22, 24, and 26 release lines.
 
 ## 0.1.0 - 2026-06-27
 
